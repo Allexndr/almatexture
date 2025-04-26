@@ -1,0 +1,15 @@
+{
+  "siteTitle": "AlmaTexture",
+  "itemsPerPage": 12,
+  "enableComments": true,
+  "enableRegistration": false,
+  "contactEmail": "almatexture@yandex.kz",
+  "defaultMapCenter": {
+    "lat": 43.2389,
+    "lng": 76.8897
+  },
+  "defaultMapZoom": 12,
+  "currency": "KZT",
+  "shippingCost": 1500,
+  "freeShippingThreshold": 20000
+}

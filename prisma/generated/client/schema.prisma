@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model District {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  description String?
+  coordinates String?
+  color       String?
+  createdAt   DateTime? @default(now()) @map("created_at")
+  updatedAt   DateTime? @default(now()) @map("updated_at")
+  textures    Texture[]
+
+  @@map("districts")
+}
+
+model Texture {
+  id                Int          @id @default(autoincrement())
+  districtId        Int?         @map("district_id")
+  title             String
+  description       String?
+  imageUrl          String?      @map("image_url")
+  imageThumbnailUrl String?      @map("image_thumbnail_url")
+  coordinates       String?
+  metaData          String?      @default("{}") @map("meta_data")
+  viewsCount        Int?         @default(0) @map("views_count")
+  isFeatured        Boolean?     @default(false) @map("is_featured")
+  createdAt         DateTime?    @default(now()) @map("created_at")
+  updatedAt         DateTime?    @default(now()) @map("updated_at")
+  products          Product[]
+  tags              TextureTag[]
+  district          District?    @relation(fields: [districtId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([districtId], map: "idx_textures_district")
+  @@index([isFeatured], map: "idx_textures_featured")
+  @@map("textures")
+}
+
+model Tag {
+  id        Int          @id @default(autoincrement())
+  name      String       @unique
+  slug      String       @unique
+  color     String?
+  createdAt DateTime?    @default(now()) @map("created_at")
+  textures  TextureTag[]
+
+  @@map("tags")
+}
+
+model TextureTag {
+  textureId Int     @map("texture_id")
+  tagId     Int     @map("tag_id")
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  texture   Texture @relation(fields: [textureId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([textureId, tagId])
+  @@index([tagId], map: "idx_texture_tags_tag")
+  @@index([textureId], map: "idx_texture_tags_texture")
+  @@map("texture_tags")
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  passwordHash String?   @map("password_hash")
+  name         String?
+  avatarUrl    String?   @map("avatar_url")
+  role         String?   @default("user")
+  createdAt    DateTime? @default(now()) @map("created_at")
+  updatedAt    DateTime? @default(now()) @map("updated_at")
+  orders       Order[]
+
+  @@map("users")
+}
+
+model Product {
+  id            Int              @id @default(autoincrement())
+  textureId     Int?             @map("texture_id")
+  type          String
+  name          String
+  description   String?
+  price         Float            @map("price")
+  discountPrice Float?           @map("discount_price")
+  stockQuantity Int?             @default(0) @map("stock_quantity")
+  isAvailable   Boolean?         @default(true) @map("is_available")
+  metaData      String?          @default("{}") @map("meta_data")
+  createdAt     DateTime?        @default(now()) @map("created_at")
+  updatedAt     DateTime?        @default(now()) @map("updated_at")
+  orderItems    OrderItem[]
+  variants      ProductVariant[]
+  texture       Texture?         @relation(fields: [textureId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("products")
+}
+
+model ProductVariant {
+  id              Int         @id @default(autoincrement())
+  productId       Int?        @map("product_id")
+  color           String?
+  size            String?
+  priceAdjustment Float?      @default(0) @map("price_adjustment")
+  stockQuantity   Int?        @default(0) @map("stock_quantity")
+  isAvailable     Boolean?    @default(true) @map("is_available")
+  createdAt       DateTime?   @default(now()) @map("created_at")
+  orderItems      OrderItem[]
+  product         Product?    @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([productId], map: "idx_product_variants_product")
+  @@map("product_variants")
+}
+
+model Order {
+  id              Int         @id @default(autoincrement())
+  userId          Int?        @map("user_id")
+  status          String      @default("pending")
+  totalAmount     Float       @map("total_amount")
+  shippingAddress String?     @map("shipping_address")
+  contactInfo     String?     @map("contact_info")
+  paymentInfo     String?     @map("payment_info")
+  notes           String?
+  createdAt       DateTime?   @default(now()) @map("created_at")
+  updatedAt       DateTime?   @default(now()) @map("updated_at")
+  items           OrderItem[]
+  user            User?       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([status], map: "idx_orders_status")
+  @@index([userId], map: "idx_orders_user")
+  @@map("orders")
+}
+
+model OrderItem {
+  id               Int             @id @default(autoincrement())
+  orderId          Int?            @map("order_id")
+  productId        Int?            @map("product_id")
+  productVariantId Int?            @map("product_variant_id")
+  quantity         Int
+  price            Float
+  customDesign     String?         @map("custom_design")
+  createdAt        DateTime?       @default(now()) @map("created_at")
+  order            Order?          @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  product          Product?        @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  productVariant   ProductVariant? @relation(fields: [productVariantId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([orderId], map: "idx_order_items_order")
+  @@map("order_items")
+}

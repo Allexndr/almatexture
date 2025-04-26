@@ -1,0 +1,60 @@
+[
+  {
+    "id": "ord_9e2e46feaca771fd",
+    "customerName": "Анна Сергеева",
+    "customerEmail": "anna@example.com",
+    "customerPhone": "+7 701 234 5678",
+    "items": [
+      {
+        "productId": "prod_6c07980f83474feb",
+        "quantity": 1,
+        "price": 12500
+      },
+      {
+        "productId": "prod_b846d91d34109da5",
+        "quantity": 2,
+        "price": 3800
+      }
+    ],
+    "total": 20100,
+    "status": "completed",
+    "createdAt": "2025-04-11T06:52:36.182Z"
+  },
+  {
+    "id": "ord_f466d374186d4087",
+    "customerName": "Марат Алиев",
+    "customerEmail": "marat@example.com",
+    "customerPhone": "+7 777 765 4321",
+    "items": [
+      {
+        "productId": "prod_6138ce98c4fdad31",
+        "quantity": 1,
+        "price": 6000
+      }
+    ],
+    "total": 6000,
+    "status": "processing",
+    "createdAt": "2025-04-24T06:52:36.183Z"
+  },
+  {
+    "id": "ord_e51b3434a747724b",
+    "customerName": "Елена Ким",
+    "customerEmail": "elena@example.com",
+    "customerPhone": "+7 700 123 4567",
+    "items": [
+      {
+        "productId": "prod_452d2f8ce585c64b",
+        "quantity": 3,
+        "price": 4200
+      },
+      {
+        "productId": "prod_22ed965a46a7eb97",
+        "quantity": 1,
+        "price": 15000
+      }
+    ],
+    "total": 27600,
+    "status": "pending",
+    "createdAt": "2025-04-26T00:52:36.183Z"
+  }
+]

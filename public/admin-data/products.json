@@ -1,0 +1,42 @@
+[
+  {
+    "id": "prod_6c07980f83474feb",
+    "title": "Текстурный фотоальбом \"Алмалы\"",
+    "price": 12500,
+    "inventory": 20,
+    "imageUrl": "/images/products/album-almaly.jpg",
+    "description": "Фотоальбом с уникальными текстурами старейшего района Алматы"
+  },
+  {
+    "id": "prod_b846d91d34109da5",
+    "title": "Набор открыток \"Советская архитектура\"",
+    "price": 3800,
+    "inventory": 35,
+    "imageUrl": "/images/products/postcards-soviet.jpg",
+    "description": "Коллекция из 10 открыток с текстурами советской архитектуры Алматы"
+  },
+  {
+    "id": "prod_6138ce98c4fdad31",
+    "title": "Плакат \"Текстуры Медеу\"",
+    "price": 6000,
+    "inventory": 15,
+    "imageUrl": "/images/products/poster-medeu.jpg",
+    "description": "Постер формата А2 с визуальными текстурами района Медеу"
+  },
+  {
+    "id": "prod_452d2f8ce585c64b",
+    "title": "Текстурный блокнот \"Алматы\"",
+    "price": 4200,
+    "inventory": 50,
+    "imageUrl": "/images/products/notebook-almaty.jpg",
+    "description": "Блокнот с обложкой, вдохновленной текстурами города"
+  },
+  {
+    "id": "prod_22ed965a46a7eb97",
+    "title": "Фотокнига \"Текстуры старого города\"",
+    "price": 15000,
+    "inventory": 10,
+    "imageUrl": "/images/products/photobook-old-city.jpg",
+    "description": "Художественное издание с фотографиями исторических текстур Алматы"
+  }
+]
