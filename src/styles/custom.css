@@ -9,6 +9,17 @@
   --shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
 }
 
+/* Стили для темной темы */
+[data-theme='dark'] {
+  --primary-color: #4dabf7;
+  --secondary-color: #69db7c;
+  --accent-color: #ffc078;
+  --text-color: #ffffff;
+  --light-bg: #121212;
+  --white: #1e1e1e;
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -16,6 +27,7 @@ body {
   background-color: var(--light-bg);
   color: var(--text-color);
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Контейнер */
@@ -32,11 +44,12 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: var(--white);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 50;
   box-shadow: var(--shadow);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .header-inner {
@@ -791,4 +804,127 @@ footer {
 /* Additional class for SocialIcons component when rendered on the side */
 .social-icons-fixed {
   display: none !important;
+}
+
+/* Основной контент */
+.main-content {
+  background-color: var(--light-bg);
+  color: var(--text-color);
+  min-height: 100vh;
+  padding-top: 70px;
+  transition: background-color 0.3s ease;
+}
+
+/* Карточки */
+.card {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Заголовки */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
+  transition: color 0.3s ease;
+}
+
+/* Параграфы */
+p {
+  color: var(--text-color);
+  opacity: 0.9;
+  line-height: 1.6;
+  transition: color 0.3s ease;
+}
+
+/* Ссылки */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--secondary-color);
+}
+
+/* Кнопки */
+.button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.button-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.button-primary:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Формы */
+input, textarea, select {
+  background-color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+  padding: 10px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(77, 171, 247, 0.2);
+}
+
+/* Изображения */
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Секции */
+.section {
+  padding: 60px 0;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 40px;
+  color: var(--text-color);
+}
+
+/* Сетка */
+.grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Анимации */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 } 

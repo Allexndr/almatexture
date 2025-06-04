@@ -4,6 +4,7 @@ import React, { CSSProperties, useState } from 'react';
 import CartIcon from './CartIcon';
 import ThemeToggle from './ThemeToggle';
 import { useTheme } from '../contexts/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const navItemStyle: CSSProperties = {
   position: 'relative',
@@ -31,9 +32,10 @@ const indicatorStyle: CSSProperties = {
 };
 
 const Header: React.FC = () => {
-  const router = useRouter();
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const { theme } = useTheme();
+  const router = useRouter();
+  const { t } = useTranslation();
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   
   const navigation = [
     { name: 'Галерея', href: '/gallery' },
@@ -67,57 +69,44 @@ const Header: React.FC = () => {
           <Link href="/" style={{ 
             textDecoration: 'none', 
             fontSize: '1.5rem', 
-            fontWeight: 700, 
-            color: 'var(--primary-color)' 
+            fontWeight: 700,
+            color: theme === 'dark' ? 'var(--text-color)' : 'var(--primary-color)',
+            transition: 'color 0.3s ease'
           }}>
             <span>AlmaTexture</span>
           </Link>
 
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <nav style={{ display: 'flex' }}>
-              {navigation.map((item) => {
-                const isActive = router.pathname === item.href;
-                const isHovered = hoveredItem === item.href;
-                return (
-                  <div 
-                    key={item.href} 
-                    style={navItemStyle}
-                    onMouseEnter={() => setHoveredItem(item.href)}
-                    onMouseLeave={() => setHoveredItem(null)}
-                  >
-                    <Link
-                      href={item.href}
-                      style={{
-                        textDecoration: 'none',
-                        color: isActive ? 'var(--primary-color)' : isHovered ? 'var(--primary-color)' : theme === 'dark' ? 'var(--text-color)' : '#444',
-                        fontWeight: isActive ? 600 : 500,
-                        transition: 'color 0.3s ease'
-                      }}
-                    >
-                      {item.name}
-                    </Link>
-                    {(isActive || isHovered) && (
-                      <div 
-                        style={{
-                          ...indicatorStyle,
-                          opacity: isHovered && !isActive ? 0.5 : 1,
-                          transform: 'scaleX(1)',
-                          backgroundColor: 'var(--primary-color)'
-                        }} 
-                      />
-                    )}
-                  </div>
-                );
-              })}
-            </nav>
-            
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <ThemeToggle />
-            <div style={{ marginLeft: '12px' }}>
-              <CartIcon />
-              </div>
-            </div>
-          </div>
+          <nav style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '2rem'
+          }}>
+            {[
+              { href: '/gallery', label: t('nav.gallery') },
+              { href: '/districts', label: t('nav.districts') },
+              { href: '/shop', label: t('nav.shop') },
+              { href: '/about', label: t('nav.about') },
+              { href: '/contacts', label: t('nav.contacts') }
+            ].map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                style={{
+                  textDecoration: 'none',
+                  color: theme === 'dark' ? 'var(--text-color)' : 'var(--text-color)',
+                  opacity: router.pathname === href ? 1 : 0.7,
+                  fontWeight: router.pathname === href ? 600 : 400,
+                  transition: 'all 0.3s ease',
+                  ':hover': {
+                    opacity: 1
+                  }
+                }}
+              >
+                {label}
+              </Link>
+            ))}
+            <ThemeToggle />
+          </nav>
         </div>
       </div>
     </header>

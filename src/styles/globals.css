@@ -1,3 +1,125 @@
+/* Базовые переменные для светлой темы */
+:root {
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --primary-color: #3498db;
+  --secondary-color: #f39c12;
+  --accent-color: #2ecc71;
+  --card-bg: #ffffff;
+  --card-border: #f0f0f0;
+  --header-bg: #ffffff;
+  --footer-bg: #f9f9f9;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --input-bg: #ffffff;
+  --input-border: #e2e8f0;
+  --input-text: #333333;
+  --button-text: #ffffff;
+  --link-color: #3498db;
+  --border-color: #e2e8f0;
+  --transition-duration: 0.3s;
+}
+
+/* Анимация переключения темы */
+.theme-transition,
+.theme-transition *,
+.theme-transition *:before,
+.theme-transition *:after {
+  transition: all var(--transition-duration) ease !important;
+  transition-delay: 0 !important;
+}
+
+/* Переменные для темной темы */
+[data-theme='dark'] {
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --primary-color: #4dabf7;
+  --secondary-color: #ffc078;
+  --accent-color: #69db7c;
+  --card-bg: #1e1e1e;
+  --card-border: #333333;
+  --header-bg: #1a1a1a;
+  --footer-bg: #1a1a1a;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  --input-bg: #2d2d2d;
+  --input-border: #404040;
+  --input-text: #ffffff;
+  --button-text: #ffffff;
+  --link-color: #4dabf7;
+  --border-color: #404040;
+}
+
+/* Применение темной темы */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color var(--transition-duration) ease,
+              color var(--transition-duration) ease;
+}
+
+/* Стили для карточек и секций */
+.card,
+.section-box {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow);
+  color: var(--text-color);
+}
+
+/* Стили для инпутов */
+input,
+textarea,
+select {
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--input-text);
+}
+
+/* Стили для кнопок */
+button {
+  color: var(--button-text);
+}
+
+/* Стили для ссылок */
+a {
+  color: var(--link-color);
+}
+
+/* Стили для хедера */
+header {
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Стили для футера */
+footer {
+  background-color: var(--footer-bg);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Стили для текста */
+h1, h2, h3, h4, h5, h6, p {
+  color: var(--text-color);
+}
+
+/* Стили для описаний и дополнительного текста */
+.description,
+.subtitle,
+.additional-text {
+  color: var(--text-color);
+  opacity: 0.8;
+}
+
+/* Стили для кнопки переключения темы */
+.theme-toggle {
+  opacity: 0.9;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.theme-toggle:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
 /* Базовые стили */
 
 :root {
@@ -126,65 +248,9 @@ footer h3::after {
   }
 }
 
-/* Добавляем в конец файла глобальных стилей */
-
-/* Цветовые переменные для светлой темы (по умолчанию) */
-:root {
-  --background-color: #ffffff;
-  --text-color: #333333;
-  --primary-color: #3498db;
-  --secondary-color: #f39c12;
-  --accent-color: #2ecc71;
-  --card-bg: #ffffff;
-  --card-border: #f0f0f0;
-  --header-bg: #ffffff;
-  --footer-bg: #f9f9f9;
-  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  --hero-image: url('/pictures/almaty_mountains.jpg');
-}
-
-/* Переменные для темной темы */
-html[data-theme='dark'] {
-  --background-color: #121212;
-  --text-color: #f2f2f2;
-  --primary-color: #4dabf7;
-  --secondary-color: #ffc078;
-  --accent-color: #69db7c;
-  --card-bg: #1e1e1e;
-  --card-border: #333333;
-  --header-bg: #1a1a1a;
-  --footer-bg: #1a1a1a;
-  --shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  --hero-image: url('/pictures/almaty_wibe.jpg');
-}
-
-/* Применение стилей для темной темы */
-body.dark-theme {
-  background-color: var(--background-color);
-  color: var(--text-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
 /* Стилизация компонентов для темной темы */
-.dark-theme header {
-  background-color: var(--header-bg);
-  box-shadow: var(--shadow);
-  border-bottom: 1px solid var(--card-border);
-}
-
-.dark-theme footer {
-  background-color: var(--footer-bg);
-  border-top: 1px solid var(--card-border);
-}
-
 .dark-theme .hero {
   background-image: var(--hero-image);
-}
-
-.dark-theme .card,
-.dark-theme .section-box {
-  background-color: var(--card-bg);
-  border-color: var(--card-border);
 }
 
 .dark-theme .btn-primary {
@@ -193,11 +259,6 @@ body.dark-theme {
 
 .dark-theme .btn-secondary {
   background-color: var(--secondary-color);
-}
-
-/* Анимация переключения темы */
-body {
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Стили для галереи текстур */
