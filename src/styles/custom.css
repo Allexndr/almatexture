@@ -473,6 +473,20 @@ footer {
   z-index: 10;
 }
 
+@media screen and (max-width: 768px) {
+  .bounce-slow {
+    bottom: 1.5rem;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .bounce-slow svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 .bounce-slow:hover {
   background-color: rgba(255, 255, 255, 1);
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
@@ -645,6 +659,41 @@ footer {
   margin-top: 3rem;
 }
 
+@media screen and (max-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .section {
+    padding: 3rem 0;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-desc {
+    font-size: 1rem;
+  }
+  
+  .btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .btn {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+}
+
 .gallery-item {
   border-radius: 1rem;
   overflow: hidden;
@@ -653,6 +702,20 @@ footer {
   cursor: pointer;
   box-shadow: var(--shadow);
   transition: all 0.3s;
+}
+
+@media screen and (max-width: 768px) {
+  .gallery-item {
+    height: 200px;
+  }
+  
+  .gallery-item:hover {
+    transform: none;
+  }
+  
+  .gallery-item:hover img {
+    transform: none;
+  }
 }
 
 .gallery-item:hover {

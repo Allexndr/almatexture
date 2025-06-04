@@ -174,7 +174,7 @@ const DistrictMap: React.FC<DistrictMapProps> = ({ className }) => {
       keyFeatures: [
         'Здесь расположен международный аэропорт Алматы',
         'Район известен своими промышленными предприятиями и логистическими центрами',
-        'Здесь нет сейсмических разломов — аргумент, который мало кто обсуждает, но все ценят'
+        'Здесь нет сейсмических разломов - аргумент, который мало кто обсуждает, но все ценят'
       ],
       infrastructure: [
         'Развитая сеть железнодорожных и автомобильных дорог',
@@ -321,10 +321,16 @@ const DistrictMap: React.FC<DistrictMapProps> = ({ className }) => {
     setSelectedDistrict(district);
     setTooltipVisible(false);
     setIsModalOpen(true);
+    
+    // Блокировка прокрутки страницы
+    document.body.style.overflow = 'hidden';
   };
   
   const closeModal = () => {
     setIsModalOpen(false);
+    
+    // Восстановление прокрутки страницы
+    document.body.style.overflow = '';
   };
   
   return (
@@ -574,11 +580,12 @@ const DistrictMap: React.FC<DistrictMapProps> = ({ className }) => {
             right: 0, 
             bottom: 0, 
             backgroundColor: 'rgba(0, 0, 0, 0.7)', 
-            zIndex: 100,
+            zIndex: 9999,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '1rem'
+            padding: '1rem',
+            overflow: 'hidden'
           }}
           onClick={closeModal}
         >
@@ -590,6 +597,7 @@ const DistrictMap: React.FC<DistrictMapProps> = ({ className }) => {
               width: '100%',
               maxHeight: '90vh',
               overflow: 'auto',
+              overscrollBehavior: 'contain',
               boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
               position: 'relative'
             }}

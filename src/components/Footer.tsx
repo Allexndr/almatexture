@@ -2,14 +2,10 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="border-t border-gray-200 mt-auto py-6 bg-white">
-      <div className="container mx-auto px-6 text-center">
-        {/* Cute Message Added */}
-        <div className="text-xs text-gray-500">
-          Сделано с любовью в Алматы ❤️
-        </div>
-        <div className="text-center text-sm text-gray-500 mt-8">
-          © {new Date().getFullYear()} AlmaTexture. Все права защищены.
+    <footer className="bg-gradient-to-r from-gray-50 to-gray-100 mt-auto py-6 border-t border-gray-200">
+      <div className="container mx-auto px-4">
+        <div className="text-center text-gray-600 text-sm">
+          Исследуйте уникальные городские текстуры Алматы, запечатленные в цифровом виде. <span className="text-red-500 mx-1">❤️</span>
         </div>
       </div>
     </footer>

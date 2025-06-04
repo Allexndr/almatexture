@@ -6,170 +6,57 @@ import MapViewer from '../components/MapViewer';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-// Типы
+// Обновленная структура для текстур, соответствующая /api/admin/textures
 interface Texture {
-  id: number;
+  id: string;
   title: string;
   description: string;
   district: string;
   imageUrl: string;
-  coordinates: {
+  tags: string[];
+  coordinates?: {
     lat: number;
     lng: number;
   };
-  tags: string[];
+  createdAt: string;
 }
 
 // Районы для фильтрации
 const districts = [
   { id: 'all', name: 'Все районы' },
-  { id: 'medeu', name: 'Медеуский' },
-  { id: 'almaly', name: 'Алмалинский' },
-  { id: 'bostandyk', name: 'Бостандыкский' },
-  { id: 'alatau', name: 'Алатауский' },
-  { id: 'auezov', name: 'Ауэзовский' },
-  { id: 'turksib', name: 'Турксибский' },
-  { id: 'nauryzbay', name: 'Наурызбайский' },
-  { id: 'zhetysu', name: 'Жетысуский' },
-];
-
-// Моковые данные о текстурах
-const textures: Texture[] = [
-  {
-    id: 1,
-    title: 'Брусчатка Арбата',
-    description: 'Историческая брусчатка пешеходной улицы Жибек Жолы (Арбат)',
-    district: 'almaly',
-    imageUrl: '/images/textures/arbat-pavement.jpg',
-    coordinates: { lat: 43.257, lng: 76.945 },
-    tags: ['брусчатка', 'пешеходная зона', 'исторический центр']
-  },
-  {
-    id: 2,
-    title: 'Кора сосны в Медеу',
-    description: 'Текстура коры сосны в высокогорном курорте Медеу',
-    district: 'medeu',
-    imageUrl: '/images/textures/medeu-pine-bark.jpg',
-    coordinates: { lat: 43.157, lng: 77.058 },
-    tags: ['природа', 'дерево', 'горы']
-  },
-  {
-    id: 3,
-    title: 'Мрамор Казахконцерта',
-    description: 'Текстура мраморной отделки здания Казахконцерта',
-    district: 'medeu',
-    imageUrl: '/images/textures/kazakh-concert-marble.jpg',
-    coordinates: { lat: 43.238, lng: 76.957 },
-    tags: ['архитектура', 'камень', 'советский модернизм']
-  },
-  {
-    id: 4,
-    title: 'Асфальт проспекта Аль-Фараби',
-    description: 'Текстура асфальта на одной из главных магистралей города',
-    district: 'bostandyk',
-    imageUrl: '/images/textures/al-farabi-asphalt.jpg',
-    coordinates: { lat: 43.207, lng: 76.928 },
-    tags: ['дорога', 'урбанизм', 'современность']
-  },
-  {
-    id: 5,
-    title: 'Гранит у монумента Независимости',
-    description: 'Текстура гранитной плитки площади Республики',
-    district: 'almaly',
-    imageUrl: '/images/textures/independence-granite.jpg',
-    coordinates: { lat: 43.238, lng: 76.945 },
-    tags: ['камень', 'площадь', 'монумент']
-  },
-  {
-    id: 6,
-    title: 'Кирпичная кладка старого города',
-    description: 'Текстура исторической кирпичной кладки в старой части Алматы',
-    district: 'auezov',
-    imageUrl: '/images/textures/old-city-brickwork.jpg',
-    coordinates: { lat: 43.252, lng: 76.907 },
-    tags: ['кирпич', 'история', 'архитектура']
-  },
-  {
-    id: 7,
-    title: 'Мозаика в подземном переходе',
-    description: 'Советская мозаика в подземном переходе на ул. Абая',
-    district: 'bostandyk',
-    imageUrl: '/images/textures/abay-mosaic.jpg',
-    coordinates: { lat: 43.238, lng: 76.922 },
-    tags: ['мозаика', 'советское искусство', 'переход']
-  },
-  {
-    id: 8,
-    title: 'Алюминиевая облицовка ТРЦ Мега',
-    description: 'Современная текстура облицовки торгового центра',
-    district: 'bostandyk',
-    imageUrl: '/images/textures/mega-aluminum.jpg',
-    coordinates: { lat: 43.225, lng: 76.928 },
-    tags: ['металл', 'современность', 'ТРЦ']
-  },
-  {
-    id: 9,
-    title: 'Деревянная резьба Вознесенского собора',
-    description: 'Уникальная текстура резьбы по дереву исторического собора',
-    district: 'medeu',
-    imageUrl: '/images/textures/voznesensky-woodcarving.jpg',
-    coordinates: { lat: 43.256, lng: 76.962 },
-    tags: ['дерево', 'резьба', 'историческое наследие']
-  },
-  {
-    id: 10,
-    title: 'Каменистая текстура русла Большой Алматинки',
-    description: 'Природная текстура камней в русле горной реки',
-    district: 'nauryzbay',
-    imageUrl: '/images/textures/big-almaty-river-stones.jpg',
-    coordinates: { lat: 43.201, lng: 76.872 },
-    tags: ['природа', 'камни', 'вода']
-  },
-  {
-    id: 11,
-    title: 'Кованый забор Центрального парка',
-    description: 'Текстура художественной ковки ограждения парка',
-    district: 'almaly',
-    imageUrl: '/images/textures/central-park-fence.jpg',
-    coordinates: { lat: 43.244, lng: 76.947 },
-    tags: ['металл', 'ковка', 'парк']
-  },
-  {
-    id: 12,
-    title: 'Плитка у фонтана "Неделька"',
-    description: 'Текстура плитки вокруг одного из символов Алматы',
-    district: 'almaly',
-    imageUrl: '/images/textures/nedelka-tiles.jpg',
-    coordinates: { lat: 43.246, lng: 76.945 },
-    tags: ['камень', 'фонтан', 'советская архитектура']
-  }
+  { id: 'Медеуский', name: 'Медеуский' },
+  { id: 'Алмалинский', name: 'Алмалинский' },
+  { id: 'Бостандыкский', name: 'Бостандыкский' },
+  { id: 'Алатауский', name: 'Алатауский' },
+  { id: 'Ауэзовский', name: 'Ауэзовский' },
+  { id: 'Турксибский', name: 'Турксибский' },
+  { id: 'Наурызбайский', name: 'Наурызбайский' },
+  { id: 'Жетысуский', name: 'Жетысуский' },
 ];
 
 // Константа для изображения-заглушки
 const FALLBACK_IMAGE = 'https://via.placeholder.com/600x400/7f8c8d/ffffff?text=Текстура+не+найдена';
 
 // Обновленная функция для фолбека изображений с несколькими источниками
-const getFallbackImage = (districtId: string, textureId: number) => {
+const getFallbackImage = (districtId: string, textureId: string) => {
   const colors: Record<string, string> = {
-    'almaly': '3498db',
-    'medeu': '2ecc71',
-    'bostandyk': 'e74c3c',
-    'alatau': 'f39c12',
-    'auezov': '9b59b6',
-    'turksib': 'e67e22',
-    'nauryzbay': '16a085',
-    'zhetysu': '2980b9'
+    'Алмалинский': '3498db',
+    'Медеуский': '2ecc71',
+    'Бостандыкский': 'e74c3c',
+    'Алатауский': 'f39c12',
+    'Ауэзовский': '9b59b6',
+    'Турксибский': 'e67e22',
+    'Наурызбайский': '16a085',
+    'Жетысуский': '2980b9'
   };
   
   const color = colors[districtId] || '7f8c8d';
-  const districtName = districts.find(d => d.id === districtId)?.name || 'Алматы';
+  const districtName = districtId || 'Алматы';
   
   // Попробуем несколько вариантов путей к изображениям
   const fallbackOptions = [
-    `/textures/texture${textureId}.jpg`,
-    `/textures/${districtId}/texture${textureId}.jpg`,
-    `/images/textures/texture${textureId}.jpg`,
-    `https://source.unsplash.com/featured/?texture,${encodeURIComponent(districtName)}`,
+    textureId ? `/textures/texture${textureId}.jpg` : FALLBACK_IMAGE,
+    textureId ? `/textures/texture${textureId}.png` : FALLBACK_IMAGE,
     `https://placehold.co/600x400/${color}/ffffff?text=Текстура+${encodeURIComponent(districtName)}`,
     FALLBACK_IMAGE
   ];
@@ -177,21 +64,119 @@ const getFallbackImage = (districtId: string, textureId: number) => {
   return fallbackOptions;
 };
 
+// Обработчик ошибок загрузки изображений
+const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>, district: string, id: string) => {
+  const fallbackImages = getFallbackImage(district, id);
+  const img = e.target as HTMLImageElement;
+  const currentSrc = img.src;
+  
+  // Находим следующее изображение в списке фолбеков
+  const currentIndex = fallbackImages.findIndex(src => src === currentSrc);
+  const nextIndex = (currentIndex + 1) % fallbackImages.length;
+  
+  // Устанавливаем следующее изображение
+  img.src = fallbackImages[nextIndex];
+  
+  // Если перепробовали все варианты, останавливаемся на последнем
+  if (nextIndex === fallbackImages.length - 1) {
+    img.onerror = null; // Предотвращаем бесконечный цикл
+  }
+};
+
 const GalleryPage: React.FC = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string>('all');
-  const [filteredTextures, setFilteredTextures] = useState<Texture[]>(textures);
+  const [textures, setTextures] = useState<Texture[]>([]);
+  const [filteredTextures, setFilteredTextures] = useState<Texture[]>([]);
   const [selectedTexture, setSelectedTexture] = useState<Texture | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isClient, setIsClient] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [districts, setDistricts] = useState<{id: string, name: string, color?: string | null}[]>([
+    { id: 'all', name: 'Все районы' }
+  ]);
+  const [popularTags, setPopularTags] = useState<string[]>([]);
+  const [easterEggActive, setEasterEggActive] = useState(false);
 
-  // Add useEffect to set client state 
+  // Set client state and fetch textures on mount
   useEffect(() => {
     setIsClient(true);
-  }, []);
+    fetchTextures();
+    
+    // Пасхалка: секретная комбинация клавиш "алматы"
+    let keys: string[] = [];
+    const konami = ['а', 'л', 'м', 'а', 'т', 'ы'];
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      keys.push(e.key.toLowerCase());
+      if (keys.length > konami.length) {
+        keys.shift();
+      }
+      
+      if (keys.join('') === konami.join('')) {
+        setEasterEggActive(prev => !prev);
+        if (!easterEggActive) {
+          alert('🎉 Режим "Аутентичный Алматы" активирован! Теперь вы видите город во всей красе.');
+        } else {
+          alert('Режим "Аутентичный Алматы" деактивирован. Возвращаемся к обычной версии.');
+        }
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [easterEggActive]);
+
+  // Fetch textures from API
+  const fetchTextures = async () => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch('/api/textures');
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      
+      const data = await response.json();
+      setTextures(data.textures || []);
+      setFilteredTextures(data.textures || []);
+      setDistricts(data.districts || [{ id: 'all', name: 'Все районы' }]);
+      setPopularTags(data.tags || []);
+    } catch (error) {
+      console.error('Error fetching textures:', error);
+      setError('Не удалось загрузить данные текстур');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Фильтрация текстур при изменении района или поискового запроса
   useEffect(() => {
+    setIsLoading(true);
+    
+    const fetchFilteredTextures = async () => {
+      try {
+        // Формируем URL с параметрами для фильтрации
+        const params = new URLSearchParams();
+        if (selectedDistrict !== 'all') {
+          params.append('district', selectedDistrict);
+        }
+        if (searchTerm.trim()) {
+          params.append('search', searchTerm.trim());
+        }
+        
+        const response = await fetch(`/api/textures?${params.toString()}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        }
+        
+        const data = await response.json();
+        setFilteredTextures(data.textures || []);
+      } catch (error) {
+        console.error('Error fetching filtered textures:', error);
+        // Фильтруем локально, если API вернул ошибку
     let filtered = textures;
     
     // Фильтрация по району
@@ -205,16 +190,38 @@ const GalleryPage: React.FC = () => {
       filtered = filtered.filter(texture => 
         texture.title.toLowerCase().includes(term) || 
         texture.description.toLowerCase().includes(term) || 
-        texture.tags.some(tag => tag.toLowerCase().includes(term))
+            (texture.tags && texture.tags.some(tag => tag.toLowerCase().includes(term)))
       );
     }
     
     setFilteredTextures(filtered);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    // Устанавливаем таймаут для дебаунса запроса при изменении поискового запроса
+    const timeoutId = setTimeout(() => {
+      fetchFilteredTextures();
+    }, 300);
+    
+    return () => clearTimeout(timeoutId);
   }, [selectedDistrict, searchTerm]);
 
   // Обработчик открытия модального окна с деталями текстуры
-  const handleTextureClick = (texture: Texture) => {
+  const handleTextureClick = async (texture: Texture) => {
+    try {
+      const response = await fetch(`/api/textures/${texture.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setSelectedTexture(data.texture);
+      } else {
+        setSelectedTexture(texture);
+      }
+    } catch (error) {
+      console.error('Error fetching texture details:', error);
     setSelectedTexture(texture);
+    }
     setIsModalOpen(true);
   };
 
@@ -223,71 +230,10 @@ const GalleryPage: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  // Обработчик ошибок загрузки изображений с множественными фолбеками
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>, district: string, textureId: number) => {
-    const imgElement = e.currentTarget; // Сохраняем ссылку на элемент
-    if (!imgElement) return; // Защита от null
-    
-    const fallbackUrls = getFallbackImage(district, textureId);
-    const currentSrc = imgElement.src;
-    
-    // Проверка, что у нас есть действительный currentSrc
-    if (!currentSrc) {
-      console.error('Current src is empty for texture', textureId);
-      imgElement.src = FALLBACK_IMAGE;
-      return;
-    }
-    
-    // Найдем индекс текущего URL в массиве фолбеков
-    const currentIndex = fallbackUrls.findIndex(url => url === currentSrc);
-    
-    // Если текущий URL не найден или это последний URL в массиве, используем последний фолбек
-    if (currentIndex === -1 || currentIndex >= fallbackUrls.length - 1) {
-      console.log(`Using final fallback for texture ${textureId}`);
-      imgElement.src = FALLBACK_IMAGE;
-    } else {
-      // Иначе пробуем следующий URL
-      const nextSrc = fallbackUrls[currentIndex + 1];
-      console.log(`Trying next fallback for texture ${textureId}: ${nextSrc}`);
-      
-      if (nextSrc) {
-        imgElement.src = nextSrc;
-      } else {
-        // Если nextSrc почему-то undefined, используем заглушку
-        console.error('Next src is undefined for texture', textureId);
-        imgElement.src = FALLBACK_IMAGE;
-      }
-    }
-    
-    // Применим безопасную анимацию появления
-    // Сначала проверим, что стиль доступен
-    if (imgElement && imgElement.style) {
-      try {
-        imgElement.style.opacity = '0';
-        
-        // Сохраняем ссылку на элемент перед setTimeout
-        const imageElement = imgElement;
-        
-        setTimeout(() => {
-          try {
-            // Дополнительная проверка безопасности
-            if (imageElement && imageElement.style) {
-              imageElement.style.opacity = '1';
-            }
-          } catch (err) {
-            console.error('Error setting opacity back to 1:', err);
-          }
-        }, 100);
-      } catch (err) {
-        console.error('Error setting initial opacity:', err);
-      }
-    }
-  };
-
   return (
     <>
       <Head>
-        <title>Текстуры города | AlmaTexture</title>
+        <title>{easterEggActive ? 'Ақысыз текстуралар! | АлмаТекстура' : 'Текстуры города | AlmaTexture'}</title>
         <meta name="description" content="Галерея уникальных городских текстур Алматы, запечатленных в проекте." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -295,7 +241,7 @@ const GalleryPage: React.FC = () => {
       {/* Хедер */}
       <Header />
 
-      <main>
+      <main style={easterEggActive ? {background: 'linear-gradient(135deg, #6ab7ff 0%, #ffca6a 100%)'} : {}}>
         <section className="section" style={{ paddingTop: '8rem' }}>
           <div className="container">
             <h1 className="section-title">Текстуры города</h1>
@@ -358,11 +304,12 @@ const GalleryPage: React.FC = () => {
                 </div>
               </div>
               
+              {/* Популярные теги */}
               <div style={{ marginTop: '1rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                 <span style={{ fontSize: '0.9rem', color: 'var(--text-color)', opacity: '0.7', marginRight: '0.5rem' }}>
                   Популярные теги:
                 </span>
-                {['архитектура', 'природа', 'камень', 'история', 'металл', 'дерево'].map(tag => (
+                {popularTags.map(tag => (
                   <button 
                     key={tag}
                     onClick={() => setSearchTerm(tag)}
@@ -392,37 +339,37 @@ const GalleryPage: React.FC = () => {
             
             {/* Галерея текстур */}
             {filteredTextures.length > 0 ? (
-              <div className="gallery" style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
-                gap: '1.5rem',
-                marginBottom: '2rem'
-              }}>
+              <div className="gallery">
                 {filteredTextures.map(texture => (
                   <div key={texture.id} className="gallery-item">
                     {isClient ? (
                       <div
                         style={{
                           background: 'white',
-                          borderRadius: '0.75rem',
+                          borderRadius: '1rem',
                           overflow: 'hidden',
                           boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
                           cursor: 'pointer',
                           transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                          height: '100%'
+                          height: '100%',
+                          minHeight: '380px'
                         }}
                         onMouseOver={(e) => {
+                          if (window.innerWidth > 768) {  // Только для десктопов
                           e.currentTarget.style.transform = 'translateY(-5px)';
                           e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.12)';
+                          }
                         }}
                         onMouseOut={(e) => {
+                          if (window.innerWidth > 768) {  // Только для десктопов
                           e.currentTarget.style.transform = 'translateY(0)';
                           e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
+                          }
                         }}
                         onClick={() => handleTextureClick(texture)}
                       >
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                          <div style={{ position: 'relative', width: '100%', paddingTop: '75%' }}>
+                          <div style={{ position: 'relative', width: '100%', paddingTop: '65%' }}>
                             <img 
                               src={texture.imageUrl} 
                               alt={texture.title}
@@ -438,36 +385,63 @@ const GalleryPage: React.FC = () => {
                               onError={(e) => handleImageError(e, texture.district, texture.id)}
                             />
                           </div>
-                          <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                            <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.2rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{texture.title}</h3>
-                            <p style={{ 
-                              margin: '0 0 1rem', 
-                              fontSize: '0.9rem', 
-                              opacity: 0.8, 
-                              flex: 1,
-                              overflow: 'hidden',
-                              display: '-webkit-box',
-                              WebkitLineClamp: 3,
-                              WebkitBoxOrient: 'vertical',
-                              textOverflow: 'ellipsis'
-                            }}>
-                              {texture.description}
-                            </p>
+                          <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            <div style={{ flex: 1 }}>
+                              <h3 style={{ 
+                                margin: '0 0 0.75rem', 
+                                fontSize: '1.1rem', 
+                                fontWeight: '600',
+                                lineHeight: '1.4',
+                                overflow: 'hidden', 
+                                textOverflow: 'ellipsis', 
+                                display: '-webkit-box',
+                                WebkitLineClamp: 3,
+                                WebkitBoxOrient: 'vertical',
+                                minHeight: '3.6rem'
+                              }}>{texture.title}</h3>
+                              <p style={{ 
+                                margin: '0 0 1rem', 
+                                fontSize: '0.9rem', 
+                                opacity: 0.7, 
+                                lineHeight: '1.5',
+                                overflow: 'hidden',
+                                display: '-webkit-box',
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: 'vertical',
+                                textOverflow: 'ellipsis',
+                                minHeight: '2.7rem'
+                              }}>
+                                {texture.description}
+                              </p>
+                            </div>
                             <div style={{ 
                               display: 'flex', 
                               justifyContent: 'space-between', 
-                              alignItems: 'center'
+                              alignItems: 'flex-end',
+                              gap: '0.5rem',
+                              marginTop: 'auto'
                             }}>
-                              <div style={{ 
-                                background: 'rgba(52, 152, 219, 0.1)', 
-                                padding: '0.3rem 0.8rem', 
-                                borderRadius: '0.25rem',
-                                fontSize: '0.8rem',
-                                color: 'var(--primary-color)'
-                              }}>
-                                {districts.find(d => d.id === texture.district)?.name}
+                              <div 
+                                className="district-badge"
+                                style={{ 
+                                  background: 'rgba(52, 152, 219, 0.1)', 
+                                  padding: '0.4rem 0.8rem', 
+                                  borderRadius: '0.5rem',
+                                  fontSize: '0.8rem',
+                                  color: 'var(--primary-color)',
+                                  fontWeight: '500',
+                                  maxWidth: '70%',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                {districts.find(d => d.id === texture.district)?.name || texture.district}
                               </div>
-                              <div style={{ fontSize: '0.8rem', opacity: 0.6 }}>
+                              <div 
+                                className="texture-id"
+                                style={{ fontSize: '0.75rem', opacity: 0.5, flexShrink: 0 }}
+                              >
                                 ID: {texture.id}
                               </div>
                             </div>
@@ -478,14 +452,15 @@ const GalleryPage: React.FC = () => {
                       <div
                         style={{
                           background: 'white',
-                          borderRadius: '0.75rem',
+                          borderRadius: '1rem',
                           overflow: 'hidden',
                           boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-                          height: '100%'
+                          height: '100%',
+                          minHeight: '380px'
                         }}
                       >
                         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                          <div style={{ position: 'relative', width: '100%', paddingTop: '75%' }}>
+                          <div style={{ position: 'relative', width: '100%', paddingTop: '65%' }}>
                             <img 
                               src={texture.imageUrl} 
                               alt={texture.title}
@@ -500,36 +475,63 @@ const GalleryPage: React.FC = () => {
                               onError={(e) => handleImageError(e, texture.district, texture.id)}
                             />
                           </div>
-                          <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                            <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.2rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{texture.title}</h3>
-                            <p style={{ 
-                              margin: '0 0 1rem', 
-                              fontSize: '0.9rem', 
-                              opacity: 0.8, 
-                              flex: 1,
-                              overflow: 'hidden',
-                              display: '-webkit-box',
-                              WebkitLineClamp: 3,
-                              WebkitBoxOrient: 'vertical',
-                              textOverflow: 'ellipsis'
-                            }}>
-                              {texture.description}
-                            </p>
+                          <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            <div style={{ flex: 1 }}>
+                              <h3 style={{ 
+                                margin: '0 0 0.75rem', 
+                                fontSize: '1.1rem', 
+                                fontWeight: '600',
+                                lineHeight: '1.4',
+                                overflow: 'hidden', 
+                                textOverflow: 'ellipsis', 
+                                display: '-webkit-box',
+                                WebkitLineClamp: 3,
+                                WebkitBoxOrient: 'vertical',
+                                minHeight: '3.6rem'
+                              }}>{texture.title}</h3>
+                              <p style={{ 
+                                margin: '0 0 1rem', 
+                                fontSize: '0.9rem', 
+                                opacity: 0.7, 
+                                lineHeight: '1.5',
+                                overflow: 'hidden',
+                                display: '-webkit-box',
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: 'vertical',
+                                textOverflow: 'ellipsis',
+                                minHeight: '2.7rem'
+                              }}>
+                                {texture.description}
+                              </p>
+                            </div>
                             <div style={{ 
                               display: 'flex', 
                               justifyContent: 'space-between', 
-                              alignItems: 'center'
+                              alignItems: 'flex-end',
+                              gap: '0.5rem',
+                              marginTop: 'auto'
                             }}>
-                              <div style={{ 
-                                background: 'rgba(52, 152, 219, 0.1)', 
-                                padding: '0.3rem 0.8rem', 
-                                borderRadius: '0.25rem',
-                                fontSize: '0.8rem',
-                                color: 'var(--primary-color)'
-                              }}>
-                                {districts.find(d => d.id === texture.district)?.name}
+                              <div 
+                                className="district-badge"
+                                style={{ 
+                                  background: 'rgba(52, 152, 219, 0.1)', 
+                                  padding: '0.4rem 0.8rem', 
+                                  borderRadius: '0.5rem',
+                                  fontSize: '0.8rem',
+                                  color: 'var(--primary-color)',
+                                  fontWeight: '500',
+                                  maxWidth: '70%',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                {districts.find(d => d.id === texture.district)?.name || texture.district}
                               </div>
-                              <div style={{ fontSize: '0.8rem', opacity: 0.6 }}>
+                              <div 
+                                className="texture-id"
+                                style={{ fontSize: '0.8rem', opacity: 0.5, flexShrink: 0 }}
+                              >
                                 ID: {texture.id}
                               </div>
                             </div>
@@ -580,7 +582,7 @@ const GalleryPage: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '1rem'
+            padding: '0.5rem'
           }}
           onClick={closeModal}
           >
@@ -600,13 +602,20 @@ const GalleryPage: React.FC = () => {
             >
               <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <div style={{ 
-                  padding: '1.5rem', 
+                  padding: '1rem', 
                   borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center'
                 }}>
-                  <h2 style={{ margin: 0, fontSize: '1.5rem' }}>{selectedTexture.title}</h2>
+                  <h2 style={{ 
+                    margin: 0, 
+                    fontSize: '1.25rem',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    maxWidth: 'calc(100% - 40px)' 
+                  }}>{selectedTexture.title}</h2>
                   <button 
                     onClick={closeModal}
                     style={{ 
@@ -631,15 +640,17 @@ const GalleryPage: React.FC = () => {
                 
                 <div style={{ 
                   display: 'flex', 
-                  flexDirection: 'row', 
-                  flexWrap: 'wrap',
+                  flexDirection: 'column', 
                   flex: '1'
                 }}>
-                  <div style={{ flex: '1', minWidth: '300px' }}>
+                  <div style={{ width: '100%' }}>
                     <div style={{ 
                       width: '100%', 
-                      height: '400px', 
-                      position: 'relative'
+                      height: '250px', 
+                      position: 'relative',
+                      '@media (min-width: 768px)': {
+                        height: '400px'
+                      }
                     }}>
                       <img 
                         src={selectedTexture.imageUrl}
@@ -655,39 +666,38 @@ const GalleryPage: React.FC = () => {
                   </div>
                   
                   <div style={{ 
-                    flex: '1', 
-                    minWidth: '300px', 
-                    padding: '1.5rem',
+                    width: '100%',
+                    padding: '1rem',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '1rem'
+                    gap: '0.75rem'
                   }}>
                     <div>
-                      <h3 style={{ fontSize: '1rem', opacity: '0.7', marginBottom: '0.5rem' }}>Описание</h3>
-                      <p>{selectedTexture.description}</p>
+                      <h3 style={{ fontSize: '0.9rem', opacity: '0.7', marginBottom: '0.25rem' }}>Описание</h3>
+                      <p style={{ fontSize: '0.95rem', lineHeight: '1.4' }}>{selectedTexture.description}</p>
                     </div>
                     
                     <div>
-                      <h3 style={{ fontSize: '1rem', opacity: '0.7', marginBottom: '0.5rem' }}>Район</h3>
-                      <p>{districts.find(d => d.id === selectedTexture.district)?.name}</p>
+                      <h3 style={{ fontSize: '0.9rem', opacity: '0.7', marginBottom: '0.25rem' }}>Район</h3>
+                      <p style={{ fontSize: '0.95rem' }}>{districts.find(d => d.id === selectedTexture.district)?.name}</p>
                     </div>
                     
                     <div>
-                      <h3 style={{ fontSize: '1rem', opacity: '0.7', marginBottom: '0.5rem' }}>Координаты</h3>
-                      <p>{selectedTexture.coordinates.lat.toFixed(6)}, {selectedTexture.coordinates.lng.toFixed(6)}</p>
+                      <h3 style={{ fontSize: '0.9rem', opacity: '0.7', marginBottom: '0.25rem' }}>Координаты</h3>
+                      <p style={{ fontSize: '0.95rem' }}>{selectedTexture.coordinates?.lat.toFixed(6)}, {selectedTexture.coordinates?.lng.toFixed(6)}</p>
                     </div>
                     
                     <div>
-                      <h3 style={{ fontSize: '1rem', opacity: '0.7', marginBottom: '0.5rem' }}>Теги</h3>
+                      <h3 style={{ fontSize: '0.9rem', opacity: '0.7', marginBottom: '0.25rem' }}>Теги</h3>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                         {selectedTexture.tags.map(tag => (
                           <span 
                             key={tag}
                             style={{ 
                               background: 'rgba(52, 152, 219, 0.1)', 
-                              padding: '0.3rem 0.8rem', 
+                              padding: '0.25rem 0.6rem', 
                               borderRadius: '2rem',
-                              fontSize: '0.9rem',
+                              fontSize: '0.8rem',
                               color: 'var(--primary-color)'
                             }}
                           >
@@ -697,11 +707,11 @@ const GalleryPage: React.FC = () => {
                       </div>
                     </div>
                     
-                    <div style={{ marginTop: 'auto' }}>
+                    <div style={{ marginTop: '0.5rem' }}>
                       <Link 
-                        href={`/shop?texture=${selectedTexture.id}`}
+                        href={`/custom?texture=${selectedTexture.id}`}
                         className="btn btn-primary"
-                        style={{ width: '100%', marginTop: '1rem' }}
+                        style={{ width: '100%', marginTop: '0.5rem', fontSize: '0.95rem', padding: '0.75rem' }}
                       >
                         Создать футболку с этой текстурой
                       </Link>

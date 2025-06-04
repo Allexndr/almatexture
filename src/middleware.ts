@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as Sentry from '@sentry/nextjs';
 
 // Paths that require authentication (Now handled elsewhere)
 // const PROTECTED_PATHS = [
@@ -40,29 +39,6 @@ export default async function middleware(req: NextRequest) {
   
   const requestHeaders = new Headers(req.headers);
   requestHeaders.set('x-request-id', requestId);
-  
-  // Sentry Scope and Transaction setup (can remain for general request monitoring)
-  let transaction: Sentry.Transaction | undefined;
-  try {
-    Sentry.withScope(scope => {
-      scope.setTag('request_id', requestId);
-      scope.setTag('http.method', req.method);
-      scope.setTag('http.url', req.nextUrl.toString());
-      scope.setTag('ip_address', ip);
-
-      transaction = Sentry.startTransaction({
-        name: `${req.method} ${pathname}`,
-        op: 'http.server',
-        // Ensure scope data is included in the transaction
-        metadata: {
-          scope: scope.getScopeData()
-        }
-      });
-      scope.setSpan(transaction);
-    });
-  } catch (error) {
-    console.error('Failed to start Sentry transaction or set scope:', error);
-  }
 
   // Logging (can remain)
   console.info(JSON.stringify({
@@ -78,11 +54,10 @@ export default async function middleware(req: NextRequest) {
   // The middleware now only logs and sets up Sentry, but doesn't block access.
   // Protection for /admin must be implemented within the page/component itself.
 
-  transaction?.finish();
   return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
-// Updated matcher: Middleware now runs on ALL paths for logging/Sentry,
+// Updated matcher: Middleware now runs on ALL paths for logging,
 // but doesn't perform authentication checks here.
 // Remove admin paths if you ONLY want this middleware for specific paths.
 export const config = {

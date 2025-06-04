@@ -132,7 +132,7 @@ const CartPage = () => {
                 Перейти в коллекцию
               </Link>
               <Link 
-                href="/shop" 
+                href="/custom" 
                 style={{
                   padding: '0.75rem 1.5rem',
                   background: 'white',

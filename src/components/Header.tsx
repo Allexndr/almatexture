@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { CSSProperties, useState } from 'react';
 import CartIcon from './CartIcon';
+import ThemeToggle from './ThemeToggle';
+import { useTheme } from '../contexts/ThemeContext';
 
 const navItemStyle: CSSProperties = {
   position: 'relative',
@@ -31,6 +33,7 @@ const indicatorStyle: CSSProperties = {
 const Header: React.FC = () => {
   const router = useRouter();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const { theme } = useTheme();
   
   const navigation = [
     { name: 'Галерея', href: '/gallery' },
@@ -45,9 +48,10 @@ const Header: React.FC = () => {
       position: 'fixed',
       width: '100%',
       top: 0,
-      backgroundColor: 'white',
-      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-      zIndex: 100
+      backgroundColor: theme === 'dark' ? 'var(--header-bg)' : 'white',
+      boxShadow: theme === 'dark' ? 'var(--shadow)' : '0 2px 10px rgba(0, 0, 0, 0.1)',
+      zIndex: 100,
+      transition: 'background-color 0.3s ease, box-shadow 0.3s ease'
     }}>
       <div style={{ 
         maxWidth: '1200px', 
@@ -64,7 +68,7 @@ const Header: React.FC = () => {
             textDecoration: 'none', 
             fontSize: '1.5rem', 
             fontWeight: 700, 
-            color: '#3498db' 
+            color: 'var(--primary-color)' 
           }}>
             <span>AlmaTexture</span>
           </Link>
@@ -85,7 +89,7 @@ const Header: React.FC = () => {
                       href={item.href}
                       style={{
                         textDecoration: 'none',
-                        color: isActive ? '#3498db' : isHovered ? '#3498db' : '#444',
+                        color: isActive ? 'var(--primary-color)' : isHovered ? 'var(--primary-color)' : theme === 'dark' ? 'var(--text-color)' : '#444',
                         fontWeight: isActive ? 600 : 500,
                         transition: 'color 0.3s ease'
                       }}
@@ -97,7 +101,8 @@ const Header: React.FC = () => {
                         style={{
                           ...indicatorStyle,
                           opacity: isHovered && !isActive ? 0.5 : 1,
-                          transform: 'scaleX(1)'
+                          transform: 'scaleX(1)',
+                          backgroundColor: 'var(--primary-color)'
                         }} 
                       />
                     )}
@@ -106,8 +111,11 @@ const Header: React.FC = () => {
               })}
             </nav>
             
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <ThemeToggle />
             <div style={{ marginLeft: '12px' }}>
               <CartIcon />
+              </div>
             </div>
           </div>
         </div>

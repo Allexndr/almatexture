@@ -1,6 +1,9 @@
 import { PrismaClient } from '../../prisma/generated/client'
 import * as Sentry from '@sentry/nextjs'
 
+// Hardcoded database URL for debugging - remove in production!
+const FALLBACK_DATABASE_URL = "postgresql://postgres:cfif20041@localhost:5432/almatexture";
+
 // Настройки пула соединений
 const prismaClientOptions = {
   // Добавляем логирование запросов в режиме разработки
@@ -15,12 +18,15 @@ const prismaClientOptions = {
   // Настройки пула соединений для более эффективного использования ресурсов
   datasources: {
     db: {
-      url: process.env.DATABASE_URL,
+      url: process.env.DATABASE_URL || FALLBACK_DATABASE_URL,
     },
   },
 }
 
 const prismaClientSingleton = () => {
+  // Debug database URL
+  console.log("Using DATABASE_URL:", process.env.DATABASE_URL ? "From env" : "Using fallback URL");
+  
   const prisma = new PrismaClient(prismaClientOptions);
   
   // Настройка хуков для логирования и мониторинга в Sentry

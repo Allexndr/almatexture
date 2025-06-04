@@ -23,3 +23,336 @@ body {
   text-decoration: none;
 }
 
+/* Bounce animation for the down arrow */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0) translateX(-50%);
+  }
+  40% {
+    transform: translateY(-15px) translateX(-50%);
+  }
+  60% {
+    transform: translateY(-5px) translateX(-50%);
+  }
+}
+
+.bounce-slow {
+  animation: bounce 3s infinite;
+}
+
+/* Override Bootstrap modal z-index to ensure it appears over the sidebar */
+.modal-backdrop {
+  z-index: 1050 !important;
+}
+
+.modal-content {
+  z-index: 1051 !important;
+}
+
+.modal {
+  z-index: 1051 !important;
+  position: fixed !important;
+}
+
+/* Make sure the React Bootstrap modals display properly */
+.modal-dialog {
+  margin: 1.75rem auto;
+  max-width: 90%;
+  position: relative !important;
+}
+
+/* Ensure modal body doesn't overflow and has proper scrolling */
+.modal-body {
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-width: 500px;
+  }
+  
+  .modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - 3.5rem);
+  }
+  
+  .modal-lg {
+    max-width: 800px !important;
+  }
+}
+
+/* Footer styles */
+footer {
+  background-color: #f8f9fa;
+}
+
+footer a {
+  display: inline-block;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+footer a:hover {
+  color: var(--primary-color);
+  transform: translateX(3px);
+}
+
+footer h3 {
+  position: relative;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+footer h3::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 30px;
+  height: 2px;
+  background-color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  footer .container {
+    padding: 0 1.5rem;
+  }
+  
+  footer .grid {
+    row-gap: 2rem;
+  }
+}
+
+/* Добавляем в конец файла глобальных стилей */
+
+/* Цветовые переменные для светлой темы (по умолчанию) */
+:root {
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --primary-color: #3498db;
+  --secondary-color: #f39c12;
+  --accent-color: #2ecc71;
+  --card-bg: #ffffff;
+  --card-border: #f0f0f0;
+  --header-bg: #ffffff;
+  --footer-bg: #f9f9f9;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --hero-image: url('/pictures/almaty_mountains.jpg');
+}
+
+/* Переменные для темной темы */
+html[data-theme='dark'] {
+  --background-color: #121212;
+  --text-color: #f2f2f2;
+  --primary-color: #4dabf7;
+  --secondary-color: #ffc078;
+  --accent-color: #69db7c;
+  --card-bg: #1e1e1e;
+  --card-border: #333333;
+  --header-bg: #1a1a1a;
+  --footer-bg: #1a1a1a;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  --hero-image: url('/pictures/almaty_wibe.jpg');
+}
+
+/* Применение стилей для темной темы */
+body.dark-theme {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Стилизация компонентов для темной темы */
+.dark-theme header {
+  background-color: var(--header-bg);
+  box-shadow: var(--shadow);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.dark-theme footer {
+  background-color: var(--footer-bg);
+  border-top: 1px solid var(--card-border);
+}
+
+.dark-theme .hero {
+  background-image: var(--hero-image);
+}
+
+.dark-theme .card,
+.dark-theme .section-box {
+  background-color: var(--card-bg);
+  border-color: var(--card-border);
+}
+
+.dark-theme .btn-primary {
+  background-color: var(--primary-color);
+}
+
+.dark-theme .btn-secondary {
+  background-color: var(--secondary-color);
+}
+
+/* Анимация переключения темы */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Стили для галереи текстур */
+.gallery {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.gallery-item {
+  break-inside: avoid;
+}
+
+.gallery-item h3 {
+  font-size: 1.1rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.gallery-item p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+/* Responsive стили для галереи */
+@media (max-width: 480px) {
+  .gallery {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .gallery-item h3 {
+    font-size: 1rem;
+    min-height: 3rem !important;
+  }
+  
+  .gallery-item p {
+    font-size: 0.85rem;
+    min-height: 2.4rem !important;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+}
+
+@media (min-width: 1025px) {
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+/* Улучшение читаемости текста */
+.gallery-item .district-badge {
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+.gallery-item .texture-id {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Add filter component styles at the end of the file */
+
+/* Стили для компонентов фильтрации */
+.filters-container {
+  margin-bottom: 2rem;
+}
+
+.filter-section {
+  margin-bottom: 1.5rem;
+}
+
+.filter-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text-color);
+}
+
+.filter-subtitle {
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.filter-options {
+  width: 100%;
+}
+
+.filter-button {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 2rem;
+  font-size: 0.85rem;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-button:hover {
+  background: rgba(52, 152, 219, 0.08);
+  border-color: rgba(52, 152, 219, 0.2);
+}
+
+.filter-button.active {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.color-button {
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.color-button.active {
+  box-shadow: 0 0 0 2px white, 0 0 0 4px var(--primary-color);
+}
+
+/* Адаптивность для фильтров */
+@media (max-width: 768px) {
+  .extended-filters {
+    padding: 1rem !important;
+  }
+  
+  .filter-options .d-flex {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .filter-button {
+    flex: 0 0 auto;
+  }
+}
+

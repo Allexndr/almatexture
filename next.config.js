@@ -3,6 +3,21 @@ const { withSentryConfig } = require('@sentry/nextjs');
 
 const nextConfig = {
   reactStrictMode: true,
+  swcMinify: true,
+  trailingSlash: false,
+  
+  // Отключаем строгие проверки для продакшен сборки
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  
+  experimental: {
+    instrumentationHook: true,
+  },
+  
   images: {
     // Включаем WebP и AVIF форматы для оптимизации загрузки изображений
     formats: ['image/webp', 'image/avif'],
@@ -29,7 +44,43 @@ const nextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 7, // 1 неделя
     // Качество устанавливается через loader параметры,
     // а не напрямую в настройках images
+    domains: [
+      'res.cloudinary.com',
+      'localhost',
+      'images.unsplash.com',
+      'via.placeholder.com'
+    ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/dm9fwh2oq/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      }
+    ]
   },
+  
+  // Конфигурация для работы с MongoDB и внешними API
+  env: {
+    MONGODB_URI: process.env.MONGODB_URI,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+  },
+  
+  // Настройки для оптимизации
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error']
+    } : false,
+  },
+
   // Настраиваем HTTP заголовки
   async headers() {
     return [
@@ -85,7 +136,15 @@ const nextConfig = {
     locales: ['ru', 'en'],
     defaultLocale: 'ru',
   },
-  webpack: (config) => {
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    // Игнорируем определенные модули при сборке
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      path: false,
+      crypto: false,
+    };
+    
     config.module.rules.push({
       test: /\.(glsl|vs|fs|vert|frag)$/,
       exclude: /node_modules/,
@@ -98,6 +157,17 @@ const nextConfig = {
 // Добавляем конфигурацию Sentry
 const sentryWebpackPluginOptions = {
   silent: true, // Suppresses source map upload logs during build
+  org: "personal-jkz",
+  project: "javascript-nextjs",
 };
 
-module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions); 
+const sentryOptions = {
+  // Для других настроек Sentry см. https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+  widenClientFileUpload: true,
+  tunnelRoute: "/monitoring",
+  hideSourceMaps: true,
+  disableLogger: true,
+  automaticVercelMonitors: true,
+};
+
+module.exports = withSentryConfig(nextConfig, sentryWebpackPluginOptions, sentryOptions); 

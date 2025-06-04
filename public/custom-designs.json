@@ -1,0 +1,44 @@
+[
+  {
+    "id": "16833142343123",
+    "name": "Алексей Иванов",
+    "email": "alex@example.com",
+    "phone": "+7 777 123 4567",
+    "productType": "tshirt",
+    "size": "L",
+    "color": "black",
+    "description": "Хочу футболку с текстурой района Медеу. Желательно в минималистичном стиле, с горным пейзажем на фоне.",
+    "designType": "district",
+    "textureId": "12",
+    "referenceImageUrl": "/images/custom-designs/example-reference.jpg",
+    "status": "pending",
+    "createdAt": "2023-05-04T10:12:14.312Z"
+  },
+  {
+    "id": "16835987653234",
+    "name": "Мария Петрова",
+    "email": "maria@example.com",
+    "phone": "+7 707 456 7890",
+    "productType": "hoodie",
+    "size": "M",
+    "color": "gray",
+    "description": "Толстовка с абстрактным узором, основанным на карте центра города. Хотелось бы в спокойных тонах.",
+    "designType": "texture",
+    "status": "processing",
+    "createdAt": "2023-05-08T14:32:45.323Z"
+  },
+  {
+    "id": "1747130708990",
+    "name": "Александр Мурдасов",
+    "email": "sanmemik2000@gmail.com",
+    "phone": "+77002579004",
+    "productType": "tshirt",
+    "size": "M",
+    "color": "white",
+    "description": "ваав",
+    "designType": "texture",
+    "referenceImageUrl": "/images/custom-designs/rxnyi5xmh81cddtuuqya67yof.jpg",
+    "status": "pending",
+    "createdAt": "2025-05-13T10:05:08.990Z"
+  }
+]

@@ -373,7 +373,7 @@ const Collection = () => {
             Не нашли то, что искали? Создайте собственный дизайн футболки или аксессуара 
             с использованием текстур Алматы через наш удобный конструктор.
           </p>
-          <Link href="/shop" style={{
+          <Link href="/custom" style={{
             display: 'inline-block',
             padding: '1rem 2rem',
             background: 'var(--primary-color)',

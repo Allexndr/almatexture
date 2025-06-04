@@ -7,17 +7,18 @@ import MountainSvg from '../components/svg/MountainSvg';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useRouter } from 'next/router';
-import FeaturedTextures from '../components/FeaturedTextures';
+import { useTheme } from '../contexts/ThemeContext';
 
 const FALLBACK_IMAGE = 'https://via.placeholder.com/400x300/f0f0f0/999999?text=Текстура+не+найдена';
 
 export default function Home() {
   const [randomQuote, setRandomQuote] = useState<number>(0);
+  const { theme } = useTheme();
   
   const almatyQuotes = [
     { text: "Алматы заключает в себе совершенно разные миры. Приехать в другой район - все равно что приехать в другой город. Разное в этих мирах абсолютно все - архитектура, запах воздуха, лица людей, речь, мода.", author: "Юлия Колмогорова, дизайнер" },
     { text: "Атмосферу создают горы, видимые из любой точки города, каждый день разные. Любое место на улице сопровождается этими сумасшедше прекрасными изменчивыми каждую минуту декорациями.", author: "Юлия Колмогорова, дизайнер" },
-    { text: "Алматинский вайб для меня — это забитые летники по Панфилова и Калинина, блогеры, снимающие контент в 'Есентае', 'спортики', с раннего утра спешащие на Медео и Горельник.", author: "Айгерим Кайназарова, редактор" },
+    { text: "Алматинский вайб для меня - это забитые летники по Панфилова и Калинина, блогеры, снимающие контент в 'Есентае', 'спортики', с раннего утра спешащие на Медео и Горельник.", author: "Айгерим Кайназарова, редактор" },
     { text: "Это город-сад, город-любовь. Мне нравится, что Алматы такой разный, поездка в другой район - все равно, что поездка в другой город.", author: "Гульнар Рахимжанова, врач" },
     { text: "Особую атмосферу Алматы создают люди - открытые, яркие, теплые. В других городах невозможно сегодня познакомиться, а завтра уже вместе тусить.", author: "Асель Акопян, эксперт по коммуникациям" },
     { text: "Для меня алматинский вайб - это, конечно же, горы, полные людей летние террасы, гостеприимство и творческая атмосфера, которой буквально пропитана каждая улочка.", author: "Маржан Шарипова, стилист" },
@@ -162,7 +163,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>AlmaTexture — погрузись в алматинский вайб</title>
+        <title>AlmaTexture - погрузись в алматинский вайб</title>
         <meta
           name="description"
           content="Исследуйте уникальные городские текстуры Алматы с проектом AlmaTexture. Откройте для себя коллекции, созданные на основе реальных поверхностей города."
@@ -174,12 +175,15 @@ export default function Home() {
       {/* Хедер */}
       <Header />
       
-      {/* Секция "Герой" с первой фотографией на фоне */}
+      {/* Секция "Герой" с фотографией на фоне (день/ночь) */}
       <section className="hero" ref={parallaxRef} style={{
-        backgroundImage: 'url(/pictures/almaty_mountains.jpg)',
+        backgroundImage: theme === 'dark' 
+          ? 'url(/pictures/night_almaty.jpg)' 
+          : 'url(/pictures/almaty_mountains.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        position: 'relative'
+        position: 'relative',
+        transition: 'background-image 0.8s ease'
       }}>
         {/* Затемнение для лучшей читаемости текста */}
         <div style={{
@@ -188,7 +192,9 @@ export default function Home() {
           left: 0,
           width: '100%',
           height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.4)',
+          backgroundColor: theme === 'dark' 
+            ? 'rgba(0, 0, 0, 0.4)' 
+            : 'rgba(0, 0, 0, 0.4)',
           zIndex: 0
         }}></div>
         
@@ -230,13 +236,38 @@ export default function Home() {
             <Link href="/gallery" className="btn btn-primary" style={{ display: 'inline-flex', position: 'relative', zIndex: 5, minWidth: '200px' }}>
               Исследовать текстуры
             </Link>
-            <Link href="/shop" className="btn btn-secondary" style={{ display: 'inline-flex', position: 'relative', zIndex: 5, minWidth: '200px' }}>
+            <Link href="/custom" className="btn btn-secondary" style={{ display: 'inline-flex', position: 'relative', zIndex: 5, minWidth: '200px' }}>
               Создать свою футболку
             </Link>
           </div>
         </div>
 
-        <div className="bounce-slow" style={{ zIndex: 10 }} onClick={scrollToNextSection}>
+        <div className="bounce-slow" style={{ 
+          zIndex: 10, 
+          position: 'absolute',
+          bottom: '30px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '50px',
+          height: '50px',
+          background: 'white',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+          cursor: 'pointer',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+        }} 
+        onClick={scrollToNextSection}
+        onMouseOver={(e) => {
+          e.currentTarget.style.transform = 'translateX(-50%) translateY(-5px)';
+          e.currentTarget.style.boxShadow = '0 6px 15px rgba(0, 0, 0, 0.15)';
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.transform = 'translateX(-50%)';
+          e.currentTarget.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.1)';
+        }}>
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#3498db" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
           </svg>
@@ -283,7 +314,7 @@ export default function Home() {
                 "{almatyQuotes[randomQuote].text}"
               </p>
               <footer style={{ marginTop: '1rem', fontWeight: 'bold', color: '#3498db' }}>
-                — {almatyQuotes[randomQuote].author}
+                - {almatyQuotes[randomQuote].author}
               </footer>
             </blockquote>
             <div style={{ fontSize: '0.8rem', opacity: 0.7, marginTop: '0.5rem' }}>
@@ -431,8 +462,8 @@ export default function Home() {
           
           <div className="gallery" style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
-            gap: '1.5rem',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', 
+            gap: '1rem',
             marginBottom: '2rem'
           }}>
             {[
@@ -465,7 +496,7 @@ export default function Home() {
                     e.currentTarget.style.transform = 'translateY(0)';
                     e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
                   }}>
-                    <div style={{ position: 'relative', width: '100%', paddingTop: '75%' }}>
+                    <div style={{ position: 'relative', width: '100%', paddingTop: '70%' }}>
                       <img 
                         src={item.img} 
                         alt={item.name}
@@ -482,16 +513,16 @@ export default function Home() {
                         onError={onError}
                       />
                     </div>
-                    <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                      <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.2rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</h3>
+                    <div style={{ padding: '1rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                      <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.1rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</h3>
                       <p style={{ 
-                        margin: '0 0 1rem', 
-                        fontSize: '0.9rem', 
+                        margin: '0 0 0.5rem', 
+                        fontSize: '0.85rem', 
                         opacity: 0.8, 
                         flex: 1,
                         overflow: 'hidden',
                         display: '-webkit-box',
-                        WebkitLineClamp: 3,
+                        WebkitLineClamp: 2,
                         WebkitBoxOrient: 'vertical',
                         textOverflow: 'ellipsis'
                       }}>{item.desc}</p>
@@ -521,7 +552,7 @@ export default function Home() {
           
           <div style={{ maxWidth: '800px', margin: '0 auto 3rem', textAlign: 'center' }}>
             <p style={{ fontSize: '1.1rem', opacity: 0.8 }}>
-              TexturesAlmaty — это проект, который исследует городские текстуры Алматы,
+              TexturesAlmaty - это проект, который исследует городские текстуры Алматы,
               превращая их в цифровые арт-объекты и предметы одежды.
             </p>
           </div>

@@ -1,0 +1,352 @@
+/* Демонстрация продвинутых CSS-свойств для проекта */
+
+/* 1. Цветовые системы (RGB, Hex, Named) */
+:root {
+  --primary-color: #4a90e2; /* Hex */
+  --secondary-color: rgb(76, 175, 80); /* RGB */
+  --accent-color: orange; /* Named */
+  --dark-color: #2c3e50;
+  --light-color: #f8f9fa;
+  --danger-color: rgb(220, 53, 69);
+  --warning-color: rgb(255, 193, 7);
+  --success-color: rgb(40, 167, 69);
+}
+
+/* 2. Стилизация текста */
+.styled-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  color: var(--dark-color);
+  text-align: center;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.fancy-heading {
+  font-family: 'Georgia', serif;
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1.5rem;
+}
+
+/* 3. Селекторы (элемент, класс, ID, потомки, псевдокласс, псевдоэлемент) */
+/* Селектор элемента */
+button {
+  cursor: pointer;
+}
+
+/* Селектор класса */
+.card {
+  border-radius: 8px;
+}
+
+/* Селектор ID */
+#main-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Селектор потомка */
+.navbar .nav-link {
+  padding: 0.5rem 1rem;
+}
+
+/* Псевдокласс */
+.nav-link:hover {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+/* Псевдоэлемент */
+.section-heading::before {
+  content: '§';
+  color: var(--primary-color);
+  margin-right: 0.5rem;
+  font-weight: bold;
+}
+
+.quote::before {
+  content: '"';
+  font-size: 2rem;
+  color: var(--accent-color);
+  position: absolute;
+  left: -20px;
+  top: -10px;
+}
+
+.quote::after {
+  content: '"';
+  font-size: 2rem;
+  color: var(--accent-color);
+  position: absolute;
+  right: -20px;
+  bottom: -10px;
+}
+
+/* 4. CSS Box Model (width, height, margin, padding, border, border-radius) */
+.box-model-demo {
+  width: 300px;
+  height: 200px;
+  margin: 20px auto;
+  padding: 25px;
+  border: 3px solid var(--primary-color);
+  border-radius: 12px;
+  background-color: var(--light-color);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 5. CSS positioning (relative, absolute, fixed) и z-index */
+.position-container {
+  position: relative;
+  height: 200px;
+  width: 100%;
+  margin: 30px 0;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.relative-box {
+  position: relative;
+  top: 20px;
+  left: 20px;
+  width: 100px;
+  height: 100px;
+  background-color: var(--primary-color);
+  z-index: 1;
+}
+
+.absolute-box {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  width: 100px;
+  height: 100px;
+  background-color: var(--secondary-color);
+  z-index: 2;
+}
+
+.fixed-element {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+/* 6. Transitions, animations, opacity */
+/* Transition */
+.btn-custom {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.btn-custom:hover {
+  background-color: #3a7bc8;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+/* Opacity */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.image-container:hover .overlay {
+  opacity: 1;
+}
+
+/* 7. Responsive design with media queries */
+/* Mobile first approach */
+.responsive-container {
+  padding: 15px;
+  font-size: 16px;
+}
+
+@media (min-width: 576px) {
+  .responsive-container {
+    padding: 20px;
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 768px) {
+  .responsive-container {
+    padding: 30px;
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 992px) {
+  .responsive-container {
+    padding: 40px;
+    font-size: 22px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+}
+
+/* 8. Flexbox for layout */
+.flex-container {
+  display: flex;
+  justify-content: space-between; /* Распределение элементов по горизонтали */
+  align-items: center; /* Выравнивание элементов по вертикали */
+  flex-wrap: wrap; /* Перенос элементов на новую строку */
+  gap: 20px;
+}
+
+.flex-item {
+  flex: 1 0 300px; /* flex-grow, flex-shrink, flex-basis */
+  min-height: 200px;
+  background-color: var(--light-color);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.flex-item:hover {
+  transform: translateY(-5px);
+}
+
+/* 9. Стили для специфических компонентов */
+/* Стили для карточек продуктов */
+.product-card {
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-card .card-img-top {
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+/* Стили для кнопок в форме */
+.form-button {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.form-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+  z-index: -1;
+}
+
+.form-button:hover::before {
+  left: 100%;
+}
+
+/* 10. Google Fonts - подключение через HTML или CSS @import */
+/* Подключение через @import (альтернативно можно через HTML link) */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+.google-font-demo {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Стили для модального окна */
+.modal-custom {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.modal-custom.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.modal-backdrop {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal-backdrop.show {
+  opacity: 0.5;
+}
+
+/* Стили для полей формы */
+.form-control:focus {
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+  border-color: var(--primary-color);
+}

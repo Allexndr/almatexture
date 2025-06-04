@@ -15,28 +15,32 @@ const CartIcon: React.FC = () => {
       position: 'relative', 
       textDecoration: 'none', 
       color: '#444',
-      display: 'inline-block',
-      padding: '8px',
-      borderRadius: '4px',
-      transition: 'background-color 0.3s ease'
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '40px',
+      height: '40px',
+      borderRadius: '50%',
+      transition: 'all 0.3s ease'
     }}
     onMouseOver={(e) => {
       e.currentTarget.style.backgroundColor = 'rgba(52, 152, 219, 0.1)';
+      e.currentTarget.style.transform = 'translateY(-2px)';
     }}
     onMouseOut={(e) => {
       e.currentTarget.style.backgroundColor = 'transparent';
+      e.currentTarget.style.transform = 'translateY(0)';
     }}
     >
       <svg 
-        width="24" 
-        height="24" 
+        width="22" 
+        height="22" 
         viewBox="0 0 24 24" 
         fill="none" 
         stroke="currentColor" 
         strokeWidth="2" 
         strokeLinecap="round" 
         strokeLinejoin="round"
-        style={{ display: 'block' }}
       >
         <circle cx="9" cy="21" r="1"></circle>
         <circle cx="20" cy="21" r="1"></circle>
@@ -46,20 +50,21 @@ const CartIcon: React.FC = () => {
       {isMounted && cart.totalItems > 0 && (
         <div style={{
           position: 'absolute',
-          top: '0px',
-          right: '0px',
+          top: '0',
+          right: '0',
           backgroundColor: '#3498db',
           color: 'white',
-          fontSize: '0.75rem',
+          fontSize: '0.7rem',
           fontWeight: 'bold',
-          width: '18px',
+          minWidth: '18px',
           height: '18px',
-          borderRadius: '50%',
+          borderRadius: '9px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-          pointerEvents: 'none'
+          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+          pointerEvents: 'none',
+          padding: '0 5px'
         }}>
           {cart.totalItems > 9 ? '9+' : cart.totalItems}
         </div>

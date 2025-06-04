@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить товар по URL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .cloudinary-urls {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .cloudinary-urls h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .url-example {
+            background: white;
+            padding: 8px;
+            border-radius: 3px;
+            margin: 5px 0;
+            font-family: monospace;
+            font-size: 12px;
+            border: 1px solid #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Добавить товар по URL</h1>
+        
+        <div class="cloudinary-urls">
+            <h3>Доступные URL изображений из Cloudinary:</h3>
+            <div class="url-example">https://res.cloudinary.com/dm9fwh2oq/image/upload/v1749009968/Park_of_first_president_plitka_s0enmh.jpg</div>
+            <div class="url-example">https://res.cloudinary.com/dm9fwh2oq/image/upload/v1749009970/IMAG0010_fzvmbk.jpg</div>
+            <div class="url-example">https://res.cloudinary.com/dm9fwh2oq/image/upload/v1749009968/IMG_1081_m4q4my.jpg</div>
+        </div>
+        
+        <form id="productForm">
+            <div class="form-group">
+                <label for="name">Название товара *</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="imageUrl">URL изображения *</label>
+                <input type="url" id="imageUrl" name="imageUrl" required placeholder="https://res.cloudinary.com/dm9fwh2oq/...">
+            </div>
+            
+            <div class="form-group">
+                <label for="price">Цена (₸) *</label>
+                <input type="number" id="price" name="price" min="0" step="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="category">Категория</label>
+                <select id="category" name="category">
+                    <option value="">Выберите категорию</option>
+                    <option value="tshirt">Футболки</option>
+                    <option value="hoodie">Толстовки</option>
+                    <option value="poster">Постеры</option>
+                    <option value="tote">Шопперы</option>
+                    <option value="caps">Кепки</option>
+                    <option value="bandanas">Банданы</option>
+                    <option value="tablecloth">Скатерти</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Описание</label>
+                <textarea id="description" name="description" rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="stock">Количество на складе</label>
+                <input type="number" id="stock" name="stock" min="0" value="1">
+            </div>
+            
+            <div class="form-group">
+                <label for="district">Район</label>
+                <select id="district" name="district">
+                    <option value="">Выберите район</option>
+                    <option value="Медеуский">Медеуский</option>
+                    <option value="Центральный">Центральный</option>
+                    <option value="Алмалинский">Алмалинский</option>
+                    <option value="Ауэзовский">Ауэзовский</option>
+                    <option value="Бостандыкский">Бостандыкский</option>
+                </select>
+            </div>
+            
+            <button type="submit">Добавить товар</button>
+        </form>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('productForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+            
+            const formData = new FormData(e.target);
+            const productData = {
+                name: formData.get('name'),
+                imageUrl: formData.get('imageUrl'),
+                price: parseFloat(formData.get('price')),
+                category: formData.get('category'),
+                description: formData.get('description'),
+                stock: parseInt(formData.get('stock')) || 1,
+                district: formData.get('district'),
+                colors: ['white'],
+                sizes: ['M']
+            };
+            
+            try {
+                const response = await fetch('/api/products/create-by-url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(productData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `<p class="success">✅ Товар успешно добавлен! ID: ${data.product.id}</p>`;
+                    e.target.reset();
+                } else {
+                    resultDiv.innerHTML = `<p class="error">❌ Ошибка: ${data.error}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">❌ Ошибка сети: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html> 
