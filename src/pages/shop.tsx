@@ -8,6 +8,8 @@ import { useCart } from '../contexts/CartContext';
 import { useRouter } from 'next/router';
 import ProductDetailsModal from '../components/Modals/ProductDetailsModal';
 
+const fallbackImage = '/pictures/almaty_wibe.jpg';
+
 const Shop = () => {
   const router = useRouter();
   const { product } = router.query;
@@ -20,7 +22,7 @@ const Shop = () => {
   const [showFilters, setShowFilters] = useState(false);
   const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [modalProduct, setModalProduct] = useState<any>(null);
   const [showModal, setShowModal] = useState(false);
@@ -42,221 +44,62 @@ const Shop = () => {
   const [isEcoOnly, setIsEcoOnly] = useState(false);
   const [isOnSaleOnly, setIsOnSaleOnly] = useState(false);
   const [inStockOnly, setInStockOnly] = useState(false);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
   const [sortOrder, setSortOrder] = useState('default');
+  const [priceRange, setPriceRange] = useState('all');
   const [isNewOnly, setIsNewOnly] = useState(false);
   
-  // Добавляем определения состояний для districts и textures
-  const [districts, setDistricts] = useState([
-    { id: 'all', name: 'Все районы' },
-    { id: 'medeu', name: 'Медеуский' },
-    { id: 'almaly', name: 'Алмалинский' },
-    { id: 'bostandyk', name: 'Бостандыкский' },
-    { id: 'auezov', name: 'Ауэзовский' },
-    { id: 'turksib', name: 'Турксибский' },
-    { id: 'jetysu', name: 'Жетысуский' },
-    { id: 'nauryzbay', name: 'Наурызбайский' },
-    { id: 'alatau', name: 'Алатауский' }
-  ]);
-  const [textures, setTextures] = useState([
-    { id: 'all', name: 'Все текстуры' }
-  ]);
-  
-  // Используем useRef вместо useState для отслеживания монтирования, чтобы избежать лишних ререндеров
-  const isMountedRef = React.useRef(false);
-  
-  // Обновляем хук useEffect для предотвращения ошибки навигации
   useEffect(() => {
-    // Отметим компонент как смонтированный
-    isMountedRef.current = true;
-    
-    // Загружаем товары только на клиенте и только один раз
-    if (typeof window !== 'undefined') {
+    const fetchProducts = async () => {
       setLoading(true);
       setError(null);
       
-      console.log('Отправляем запрос к API /api/products/simple');
-      
-      fetch('/api/products/simple')
-        .then(res => {
-          console.log('Получен ответ от API:', res.status, res.statusText);
-          if (!res.ok) {
-            throw new Error(`HTTP ошибка! Статус: ${res.status}`);
-          }
-          return res.json();
-        })
-        .then(data => {
-          // Проверяем, что компонент все еще смонтирован
-          if (!isMountedRef.current) return;
+      try {
+        const response = await fetch('/api/products/simple');
+        const data = await response.json();
+        
+        if (!data || data.error) {
+          throw new Error(data?.error || 'Ошибка при получении данных');
+        }
+        
+        if (data.success && data.products && Array.isArray(data.products)) {
+          const processedProducts = data.products.map((item: any) => ({
+            ...item,
+            title: item.title || item.name || '',
+            imageUrl: item.imageUrl || item.image || '',
+            price: item.price || 0,
+            category: item.category || 'other',
+            description: item.description || '',
+            stock: item.stock || 1,
+            id: item.id || String(Date.now()),
+            currency: '₸',
+            featured: item.featured || false,
+            createdAt: item.createdAt || new Date().toISOString(),
+            colors: item.colors || [],
+            sizes: item.sizes || [],
+            district: item.district || 'undefined',
+            texture: item.texture || 'undefined',
+            clothingType: item.clothingType || '',
+            material: item.material || '',
+            collection: item.collection || '',
+            season: item.season || '',
+            printTechnique: item.printTechnique || '',
+            designStyle: item.designStyle || '',
+            isEco: item.isEco || false,
+            isOnSale: item.isOnSale || false,
+            timePeriod: item.timePeriod || ''
+          }));
           
-          if (!data || data.error) {
-            throw new Error(data?.error || 'Ошибка при получении данных');
-          }
-          
-          console.log('Получены данные из MongoDB:', data);
-          
-          if (data.success && data.products && Array.isArray(data.products)) {
-            const processedProducts = data.products.map((item: any) => ({
-              ...item,
-              title: item.title || item.name || '',
-              imageUrl: item.imageUrl || item.image || '',
-              price: item.price || 0,
-              category: item.category || 'other',
-              description: item.description || '',
-              stock: item.stock || 1,
-              id: item.id || String(Date.now()),
-              currency: '₸',
-              featured: item.featured || false,
-              createdAt: item.createdAt || new Date().toISOString(),
-              colors: item.colors || [],
-              sizes: item.sizes || [],
-              district: item.district || 'undefined',
-              texture: item.texture || 'undefined',
-              clothingType: item.clothingType || '',
-              material: item.material || '',
-              collection: item.collection || '',
-              season: item.season || '',
-              printTechnique: item.printTechnique || '',
-              designStyle: item.designStyle || '',
-              isEco: item.isEco || false,
-              isOnSale: item.isOnSale || false,
-              timePeriod: item.timePeriod || ''
-            }));
-            
-            setProducts(processedProducts);
-            console.log('Товары успешно загружены из MongoDB:', processedProducts.length);
-            
-            // Создаем данные о районах из товаров
-            const uniqueDistricts = [...new Set(processedProducts
-              .map((p: any) => p.district)
-              .filter(Boolean)
-            )];
-            
-            const districts = uniqueDistricts.map(name => ({
-              id: name,
-              name,
-              color: '#' + Math.floor(Math.random() * 16777215).toString(16)
-            }));
-            
-            setDistricts([
-              { id: 'all', name: 'Все районы' },
-              ...districts
-            ]);
-            
-            // Создаем данные о текстурах из товаров
-            const uniqueTextures = [...new Set(processedProducts
-              .map((p: any) => p.texture)
-              .filter(Boolean)
-            )];
-            
-            const textures = uniqueTextures.map((texture, index) => ({
-              id: index + 1,
-              title: texture
-            }));
-            
-            setTextures([
-              { id: 'all', name: 'Все текстуры' },
-              ...textures
-            ]);
-          } else {
-            throw new Error('Неизвестный формат данных от API');
-          }
-          
+          setProducts(processedProducts);
           setLoading(false);
-        })
-        .catch(error => {
-          // Проверяем, что компонент все еще смонтирован
-          if (!isMountedRef.current) return;
-          
-          console.error('Ошибка при загрузке товаров из MongoDB:', error);
-          setLoading(false);
-          setError(error.message || 'Не удалось загрузить товары');
-          
-          // Fallback - пробуем загрузить из старого API
-          console.log('Пробуем fallback к /api/shop');
-          fetch('/api/shop')
-            .then(res => res.json())
-            .then(data => {
-              if (!isMountedRef.current) return;
-              
-              if (data.products && Array.isArray(data.products)) {
-                const processedProducts = data.products.map((item: any) => ({
-                  ...item,
-                  title: item.title || item.name || '',
-                  imageUrl: item.imageUrl || item.image || '',
-                  price: item.price || 0,
-                  category: item.category || 'other',
-                  description: item.description || '',
-                  stock: item.stock || 1,
-                  id: item.id || String(Date.now()),
-                  currency: item.currency || '₸',
-                  featured: item.featured || false,
-                  createdAt: item.createdAt || new Date().toISOString(),
-                  colors: item.colors || [],
-                  sizes: item.sizes || [],
-                  district: item.district || 'undefined',
-                  texture: item.texture || 'undefined'
-                }));
-                
-                setProducts(processedProducts);
-                console.log('Fallback: товары загружены из /api/shop');
-                
-                // Если API вернула метаданные с районами и текстурами, используем их
-                if (data.metadata) {
-                  if (data.metadata.districts && Array.isArray(data.metadata.districts)) {
-                    setDistricts(data.metadata.districts);
-                  }
-                  
-                  if (data.metadata.textures && Array.isArray(data.metadata.textures)) {
-                    setTextures(data.metadata.textures);
-                  }
-                }
-              }
-              setLoading(false);
-            })
-            .catch(fallbackError => {
-              if (!isMountedRef.current) return;
-              console.error('Fallback также не удался:', fallbackError);
-              
-              // Добавляем заглушки для отладки
-              console.log('Загружаем заглушки товаров для отладки');
-              const debugProducts = [
-                {
-                  id: "debug-1",
-                  title: "Тестовый товар 1",
-                  description: "Это тестовый товар для отладки",
-                  price: 1000,
-                  category: "poster",
-                  imageUrl: "/pictures/almaty_wibe.jpg",
-                  stock: 10,
-                  currency: "₸",
-                  colors: ["Белый", "Черный"],
-                  sizes: ["S", "M", "L"]
-                },
-                {
-                  id: "debug-2",
-                  title: "Тестовый товар 2",
-                  description: "Это еще один тестовый товар для отладки",
-                  price: 2000,
-                  category: "tshirt",
-                  imageUrl: "/pictures/almaty_wibe.jpg",
-                  stock: 5,
-                  currency: "₸",
-                  colors: ["Красный", "Синий"],
-                  sizes: ["M", "L", "XL"]
-                }
-              ];
-              
-              setProducts(debugProducts);
-              setLoading(false);
-            });
-        });
-    }
-    
-    // Очистка при размонтировании компонента
-    return () => {
-      isMountedRef.current = false;
+        }
+      } catch (error: any) {
+        console.error('Ошибка при загрузке товаров:', error);
+        setError(error.message || 'Не удалось загрузить товары');
+        setLoading(false);
+      }
     };
+    
+    fetchProducts();
   }, []);
   
   const categories = [
@@ -311,8 +154,6 @@ const Shop = () => {
     { id: 'XXL', name: 'XXL' },
     { id: 'XXXL', name: 'XXXL' }
   ];
-  
-  const fallbackImage = "/pictures/almaty_wibe.jpg";
   
   // Добавить новые константы для фильтров
   const materials = [
@@ -930,8 +771,8 @@ const Shop = () => {
       </div>
       
       <Head>
-        <title>Магазин | AlmaTexture</title>
-        <meta name="description" content="Купите уникальные товары, созданные на основе текстур Алматы, в официальном магазине проекта." />
+        <title>Магазин AlmaTexture - Уникальные предметы с текстурами Алматы</title>
+        <meta name="description" content="Откройте для себя коллекцию уникальных предметов, которые воплощают текстуры Алматы в повседневных вещах. Каждый предмет хранит частичку города и его истории." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
