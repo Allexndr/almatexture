@@ -31,6 +31,19 @@ interface FormData {
 
 const TexturesAdminPage: NextPage = () => {
   const router = useRouter();
+  
+  // Список районов Алматы
+  const districts = [
+    'Медеуский',
+    'Алмалинский',
+    'Бостандыкский',
+    'Ауэзовский',
+    'Алатауский',
+    'Жетысуский',
+    'Турксибский',
+    'Наурызбайский'
+  ];
+  
   const [textures, setTextures] = useState<Texture[]>([]);
   const [filteredTextures, setFilteredTextures] = useState<Texture[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -45,22 +58,10 @@ const TexturesAdminPage: NextPage = () => {
   const [formData, setFormData] = useState<FormData>({
     title: '',
     description: '',
-    district: districts[1], // Медеуский по умолчанию
+    district: districts[0], // Медеуский по умолчанию
     tags: '',
     imageUrl: ''
   });
-  
-  // Список районов Алматы
-  const districts = [
-    'Медеуский',
-    'Алмалинский',
-    'Бостандыкский',
-    'Ауэзовский',
-    'Алатауский',
-    'Жетысуский',
-    'Турксибский',
-    'Наурызбайский'
-  ];
   
   // Проверка аутентификации
   useEffect(() => {
@@ -132,7 +133,7 @@ const TexturesAdminPage: NextPage = () => {
     setFormData({
       title: '',
       description: '',
-      district: districts[1],
+      district: districts[0],
       tags: '',
       imageUrl: ''
     });
